@@ -41,3 +41,4 @@ class GPlayCrawler(scrapy.Spider):
         item["gp_sub_title"] = gp_sub_title
         item["gp_art_num"] = gp_art_num
         item["pg_price"] = pg_price
+        yield item
