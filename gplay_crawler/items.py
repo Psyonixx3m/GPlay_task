@@ -3,10 +3,33 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
-import scrapy
+from scrapy_jsonschema.item import JsonSchemaItem
 
 
-class GplayCrawlerItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class GplayCrawlerItem(JsonSchemaItem):
+    jsonschema = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "title": "GplayCrawler",
+        "description": "Crawler for Hardware/Peripherals in Gplay",
+        "type": "object",
+        "properties": {
+            "gp_cat": {
+                "type": "string",
+                },
+            "gp_sub_cat": {
+                "type": "string",
+                },
+            "gp_title": {
+                    "type": "string",
+                },
+            "gp_sub_title": {
+                    "type": "string",
+                },
+            "gp_art_num": {
+                    "type": "integer",
+                },
+            "pg_price": {
+                    "type": "number",
+                }
+            },
+        }
