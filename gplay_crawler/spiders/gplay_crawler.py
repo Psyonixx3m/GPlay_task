@@ -28,17 +28,22 @@ class GPlayCrawler(scrapy.Spider):
                 yield scrapy.Request(url=next_page_url, callback=self.parse_item)
 
     def parse_item(self, resp):
-        gp_cat = resp.xpath("//div[@class='path py-3']//a[2]//text()").get()
-        gp_sub_cat = resp.xpath("//div[@class='path py-3']//a[3]//text()").get()
-        gp_title = resp.xpath("//h1[@class='large-title']").get()
-        gp_sub_title = resp.xpath("//h2[@class='product-subtitle ']").get()
-        gp_art_num = resp.xpath("//div[contains(@class,'product-ref-number')]").get()
-        pg_price = resp.xpath("//div[@class='normal-price ']").get()
-        item = GplayCrawlerItem()
-        item["gp_cat"] = gp_cat
-        item["gp_sub_cat"] = gp_sub_cat
-        item["gp_title"] = gp_title
-        item["gp_sub_title"] = gp_sub_title
-        item["gp_art_num"] = gp_art_num
-        item["pg_price"] = pg_price
-        yield item
+        gp_avail = resp.xpath("//span[@title='наличен']").get()
+        gp_lim_avail = resp.xpath("//span[contains(@title,'ограничена')]")
+        if gp_avail or gp_lim_avail:
+
+            gp_cat = resp.xpath("//div[@class='path py-3']//a[contains(text(),'')][2]//text()").get()
+            gp_sub_cat = resp.xpath("//div[@class='path py-3']//a[contains(text(),'')][3]//text()").get()
+            gp_title = resp.xpath("//h1[@class='large-title']//text()").get()
+            gp_sub_title = resp.xpath("//h2[@class='product-subtitle ']//text()").get()
+            gp_art_num = resp.xpath("//div[contains(@class,'product-ref-number')]//text()").get()
+            pg_price = float(resp.xpath("//div[contains(@class, 'product-price-controls')]//price/@*").get())
+            if pg_price < 200:
+                item = GplayCrawlerItem()
+                item["gp_cat"] = gp_cat
+                item["gp_sub_cat"] = gp_sub_cat
+                item["gp_title"] = gp_title
+                item["gp_sub_title"] = gp_sub_title
+                item["gp_art_num"] = gp_art_num
+                item["pg_price"] = pg_price
+                yield item
