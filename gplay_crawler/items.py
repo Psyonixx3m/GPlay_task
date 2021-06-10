@@ -26,7 +26,7 @@ class GplayCrawlerItem(JsonSchemaItem):
                     "type": "string",
                 },
             "gp_art_num": {
-                    "type": "integer",
+                    "type": "string",
                 },
             "pg_price": {
                     "type": "number",
